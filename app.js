@@ -8,6 +8,9 @@ const app = express()
 //rest middlewares
 const morgan = require("morgan")
 
+//auth-routes
+const authRoute = require("./routes/authRouter")
+
 //import Db connection
 const connectDb = require("./db/connect")
 
@@ -22,6 +25,10 @@ app.get("/", (req, res) => {
   res.send("E-COMMERCE API")
 })
 
+//auth-route
+app.use("/api/v1/auth", authRoute)
+
+//error-handlers
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
