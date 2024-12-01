@@ -3,15 +3,19 @@ const User = require("../model/User")
 const CustomeError = require("../errors")
 
 const register = async (req, res) => {
-  const { email } = req.body
+  const { email, name, password } = req.body
 
   //check email if exists
-  const isEmail = await User.find({ email })
+  const isEmail = await User.findOne({ email })
   if (isEmail) {
     throw new CustomeError.BadRequestError("Email already exists!")
   }
+  //check if it is first rigister in Database
+  //first rigester role is admin otherwise it is not
+  const isFirst = (await User.countDocuments({})) === 0
+  const role = isFirst ? "admin" : "user"
 
-  const user = await User.create(req.body)
+  const user = await User.create(email, name, password, role)
   res.status(StatusCodes.CREATED).json({ user })
 }
 
