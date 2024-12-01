@@ -3,7 +3,7 @@ const User = require("../model/User")
 const CustomeError = require("../errors")
 
 const register = async (req, res) => {
-  const { email, name, password } = req.body
+  const { name, email, password } = req.body
 
   //check email if exists
   const isEmail = await User.findOne({ email })
@@ -12,10 +12,10 @@ const register = async (req, res) => {
   }
   //check if it is first rigister in Database
   //first rigester role is admin otherwise it is not
-  const isFirst = (await User.countDocuments({})) === 0
-  const role = isFirst ? "admin" : "user"
+  const isFirstAccount = (await User.countDocuments({})) === 0
+  const role = isFirstAccount ? "admin" : "user"
 
-  const user = await User.create(email, name, password, role)
+  const user = await User.create({ name, email, password, role })
   res.status(StatusCodes.CREATED).json({ user })
 }
 

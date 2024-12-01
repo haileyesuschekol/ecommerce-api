@@ -19,9 +19,9 @@ const userSchema = new mongoose.Schema({
       message: "Please provide valid email!",
     },
   },
-  passsword: {
+  password: {
     type: String,
-    require: [true, "Please provide a password!"],
+    required: [true, "Please provide a password!"],
     minlength: 3,
   },
   role: {
@@ -34,12 +34,12 @@ const userSchema = new mongoose.Schema({
 //hash password
 userSchema.pre("save", async function () {
   const salt = await bycrypt.genSalt(10)
-  this.passsword = await bycrypt.hash(this.passsword, salt)
+  this.password = await bycrypt.hash(this.password, salt)
 })
 
 //compare password
 userSchema.methods.comparePassword = async function (candidatePassword) {
-  const isMatch = await bycrypt.compare(candidatePassword, this.passsword)
+  const isMatch = await bycrypt.compare(candidatePassword, this.password)
   return isMatch
 }
 
