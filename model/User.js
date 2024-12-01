@@ -1,5 +1,7 @@
 const mongoose = require("mongoose")
 const validator = require("validator")
+const bycrypt = require("bcryptjs")
+
 //define user model
 const userSchema = new mongoose.Schema({
   name: {
@@ -28,5 +30,17 @@ const userSchema = new mongoose.Schema({
     default: "user",
   },
 })
+
+//hash password
+userSchema.pre("save", async function () {
+  const salt = await bycrypt.genSalt(10)
+  this.passsword = await bycrypt.hash(this.passsword, salt)
+})
+
+//compare password
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  const isMatch = await bycrypt.compare(candidatePassword, this.passsword)
+  return isMatch
+}
 
 module.exports = mongoose.model("User", userSchema)
