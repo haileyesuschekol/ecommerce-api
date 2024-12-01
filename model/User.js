@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
     maxlength: 50,
   },
   email: {
+    unique: true,
     type: String,
     required: [true, "Please provid email!"],
     validate: {
