@@ -7,7 +7,7 @@ const app = express()
 
 //rest middlewares
 const morgan = require("morgan")
-
+const cookieParser = require("cookie-parser")
 //auth-routes
 const authRoute = require("./routes/authRouter")
 
@@ -20,9 +20,15 @@ const notFoundMiddleware = require("./middleware/not-found")
 
 app.use(morgan("tiny"))
 app.use(express.json())
+app.use(cookieParser())
 
 app.get("/", (req, res) => {
   res.send("E-COMMERCE API")
+})
+
+app.get("/api/v1", (req, res) => {
+  // console.log(req.cookies)
+  res.send("sent cookies")
 })
 
 //auth-route
