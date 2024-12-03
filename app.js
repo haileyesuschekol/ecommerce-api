@@ -10,6 +10,7 @@ const morgan = require("morgan")
 const cookieParser = require("cookie-parser")
 //auth-routes
 const authRoute = require("./routes/authRouter")
+const userRoute = require("./routes/userRouter")
 
 //import Db connection
 const connectDb = require("./db/connect")
@@ -34,6 +35,7 @@ app.get("/api/v1", (req, res) => {
 
 //auth-route
 app.use("/api/v1/auth", authRoute)
+app.use("/api/v1/users", userRoute)
 
 //error-handlers
 app.use(notFoundMiddleware)
