@@ -1,5 +1,7 @@
 const { isTokenValid } = require("../utils")
 const CustomeError = require("../errors")
+
+//authenticate route
 const authenticate = async (req, res, next) => {
   const token = req.signedCookies.token
   if (!token) {
@@ -15,4 +17,14 @@ const authenticate = async (req, res, next) => {
   }
 }
 
-module.exports = authenticate
+//authorize route
+const authorizedPermission = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      throw new CustomeError.unAuthorized("Authorization failed!")
+    }
+    next()
+  }
+}
+
+module.exports = { authenticate, authorizedPermission }
