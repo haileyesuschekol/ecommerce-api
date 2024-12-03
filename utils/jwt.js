@@ -13,6 +13,8 @@ const attachCookieToResponse = ({ res, user }) => {
   res.cookie("token", token, {
     httpOnly: true,
     expires: new Date(Date.now() + expDate),
+    secure: process.env.NODE_ENV === "production",
+    signed: true,
   })
 }
 //validate jwt
