@@ -16,7 +16,7 @@ router.route("/").get(authenticate, authorizedPermission("admin"), getAllUser)
 
 router.route("/user").get(authenticate, showCurrentUser)
 router.route("/updateUser").patch(updateUser)
-router.route("/updateUserPassword").patch(updateUserPassword)
+router.route("/updateUserPassword").patch(authenticate, updateUserPassword)
 
 router.route("/:id").get(authenticate, getSingleUser)
 

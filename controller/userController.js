@@ -19,8 +19,23 @@ const showCurrentUser = async (req, res) => {
 const updateUser = async (req, res) => {
   res.send("update user")
 }
+
+//update password
 const updateUserPassword = async (req, res) => {
-  res.send("update password")
+  const { oldPassword, newPassword } = req.body
+  if (!oldPassword || !newPassword) {
+    throw new CustomeError.BadRequestError(
+      "please provide old and new password!"
+    )
+  }
+  const user = await User.findOne({ _id: req.user.userId })
+  const isOldPasswordCorrect = await user.comparePassword(oldPassword)
+  if (!isOldPasswordCorrect) {
+    throw new CustomeError.UnauthenticatedError("Incorrect old Password!")
+  }
+  user.password = newPassword
+  await user.save()
+  res.status(StatusCodes.OK).json({ msg: "Password updated successfully!" })
 }
 
 module.exports = {
