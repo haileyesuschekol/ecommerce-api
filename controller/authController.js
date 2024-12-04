@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes")
 const User = require("../model/User")
 const CustomeError = require("../errors")
-const { attachCookieToResponse } = require("../utils")
+const { attachCookieToResponse, createTokenUser } = require("../utils")
 
 const register = async (req, res) => {
   const { name, email, password } = req.body
@@ -16,7 +16,7 @@ const register = async (req, res) => {
   const isFirstAccount = (await User.countDocuments({})) === 0
   const role = isFirstAccount ? "admin" : "user"
   const user = await User.create({ name, email, password, role })
-  const userToken = { userId: user._id, userName: user.name, role: user.role }
+  const userToken = createTokenUser(user)
   //create cookie
   attachCookieToResponse({ res, user: userToken })
   res.status(StatusCodes.CREATED).json({ user: userToken })
@@ -36,7 +36,7 @@ const login = async (req, res) => {
     throw new CustomeError.UnauthenticatedError("incorrect password!")
   }
 
-  const userToken = { userId: user._id, userName: user.name, role: user.role }
+  const userToken = createTokenUser(user)
   //create cookie
   attachCookieToResponse({ res, user: userToken })
   res.status(StatusCodes.CREATED).json({ user: userToken })
