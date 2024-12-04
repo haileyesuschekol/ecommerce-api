@@ -27,6 +27,6 @@ router
   .route("/:id")
   .get(getSingleProduct)
   .patch([authenticate, authorizedPermission("admin")], updateProduct)
-  .delete(deleteProduct)
+  .delete([authenticate, authorizedPermission("admin")], deleteProduct)
 
 module.exports = router
