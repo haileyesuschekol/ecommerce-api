@@ -2,6 +2,7 @@ const Product = require("../model/Product")
 const Review = require("../model/Review")
 const { StatusCodes } = require("http-status-codes")
 const CustomeError = require("../errors")
+const { checkPermission } = require("../utils")
 
 //create review
 const createReview = async (req, res) => {
@@ -48,7 +49,14 @@ const updateReview = async (req, res) => {
   res.send("update review")
 }
 const deleteReview = async (req, res) => {
-  res.send("delete review")
+  const { id: reviewId } = req.params
+  const review = await Review.findOne({ _id: reviewId })
+  if (!review) {
+    throw new CustomeError.NotFoundError("No review found!")
+  }
+  checkPermission(req.user, review.user)
+  await review.deleteOne()
+  res.status(StatusCodes.OK).json({ msg: "delete review" })
 }
 
 module.exports = {
