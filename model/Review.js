@@ -11,7 +11,7 @@ const reviewModel = new mongoose.Schema(
     },
     title: {
       type: String,
-      trim: trim,
+      trim: true,
       required: [true, "Please provide title!"],
       maxlength: 100,
     },
