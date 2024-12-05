@@ -9,10 +9,11 @@ const app = express()
 const morgan = require("morgan")
 const cookieParser = require("cookie-parser")
 const fileUpload = require("express-fileupload")
-//auth-routes
+//routes
 const authRoute = require("./routes/authRouter")
 const userRoute = require("./routes/userRouter")
 const productRoute = require("./routes/productRouter")
+const reviewRoute = require("./routes/reviewRouter")
 //import Db connection
 const connectDb = require("./db/connect")
 
@@ -40,6 +41,7 @@ app.get("/api/v1", (req, res) => {
 app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/users", userRoute)
 app.use("/api/v1/products", productRoute)
+app.use("/api/v1/products", reviewRoute)
 
 //error-handlers
 app.use(notFoundMiddleware)
