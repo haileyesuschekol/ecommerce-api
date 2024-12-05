@@ -1,6 +1,7 @@
 const Product = require("../model/Product")
 const { StatusCodes } = require("http-status-codes")
 const CustomeError = require("../errors")
+const path = require("path")
 
 //create product
 const createProduct = async (req, res) => {
@@ -50,7 +51,32 @@ const deleteProduct = async (req, res) => {
 
 //upload image
 const uploadImage = async (req, res) => {
-  res.send("upload image")
+  const productImage = req.file
+  if (!productImage) {
+    throw new CustomeError.BadRequestError("Please upload image!")
+  }
+
+  //check the file is image
+  if (!productImage.image.mimetype.startsWith("image")) {
+    throw new CustomeError.BadRequestError(
+      "File not supported, please upload image only!"
+    )
+  }
+
+  //check file length
+  const maxSize = 1024 * 1024
+  if (productImage.image.size > maxSize) {
+    throw new CustomeError.BadRequestError("Please upload less than 1mb!")
+  }
+
+  //move file
+  const imagePath = path.join(
+    __dirname,
+    "../public/uploads/" + `${productImage.name}`
+  )
+
+  await productImage.mv(imagePath)
+  res.status(StatusCodes.OK).json({ image: `/uploads/${productImage.name}` })
 }
 
 module.exports = {

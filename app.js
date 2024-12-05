@@ -8,6 +8,7 @@ const app = express()
 //rest middlewares
 const morgan = require("morgan")
 const cookieParser = require("cookie-parser")
+const fileUpload = require("express-fileupload")
 //auth-routes
 const authRoute = require("./routes/authRouter")
 const userRoute = require("./routes/userRouter")
@@ -22,6 +23,8 @@ const notFoundMiddleware = require("./middleware/not-found")
 app.use(morgan("tiny"))
 app.use(express.json())
 app.use(cookieParser(process.env.JWT_SECRET))
+app.use(express.static("./public"))
+app.use(fileUpload())
 
 app.get("/", (req, res) => {
   res.send("E-COMMERCE API")
