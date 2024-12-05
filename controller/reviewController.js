@@ -3,6 +3,7 @@ const Review = require("../model/Review")
 const { StatusCodes } = require("http-status-codes")
 const CustomeError = require("../errors")
 
+//create review
 const createReview = async (req, res) => {
   //check if product exist
   const { product: productId } = req.body
@@ -20,18 +21,29 @@ const createReview = async (req, res) => {
   if (alreadySubmmited) {
     throw new CustomeError.BadRequestError("Already reviewed!")
   }
-
   //create
   req.body.user = req.user.userId
   const review = await Review.create(req.body)
   res.status(StatusCodes.CREATED).json({ review })
 }
+
+//get all review
 const getAllReview = async (req, res) => {
-  res.send("get all review")
+  const review = await Review.find({})
+  res.status(StatusCodes.OK).json({ review, count: review.length })
 }
+
+//get single review
 const getSingleReview = async (req, res) => {
-  res.send("get single review")
+  const { id: reviewId } = req.params
+  const review = await Review.findOne({ _id: reviewId })
+  if (!review) {
+    throw new CustomeError.NotFoundError("No review found!")
+  }
+  res.status(StatusCodes.OK).json({ review })
 }
+
+//update review
 const updateReview = async (req, res) => {
   res.send("update review")
 }
