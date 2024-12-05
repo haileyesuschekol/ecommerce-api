@@ -46,8 +46,27 @@ const getSingleReview = async (req, res) => {
 
 //update review
 const updateReview = async (req, res) => {
-  res.send("update review")
+  const { id: reviewId } = req.params
+  const { title, rating, description } = req.body
+  const review = await Review.findOne({ _id: reviewId })
+  if (!review) {
+    throw new CustomeError.NotFoundError("No review found!")
+  }
+
+  //check permission
+  checkPermission(req.user, review.user)
+
+  //update
+  review.title = title
+  review.rating = rating
+  review.description = description
+
+  //save
+  await review.save()
+  res.status(StatusCodes.OK).json({ review })
 }
+
+//delete review
 const deleteReview = async (req, res) => {
   const { id: reviewId } = req.params
   const review = await Review.findOne({ _id: reviewId })
