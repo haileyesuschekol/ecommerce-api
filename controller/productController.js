@@ -51,13 +51,13 @@ const deleteProduct = async (req, res) => {
 
 //upload image
 const uploadImage = async (req, res) => {
-  const productImage = req.file
+  const productImage = req.files.image
   if (!productImage) {
     throw new CustomeError.BadRequestError("Please upload image!")
   }
 
   //check the file is image
-  if (!productImage.image.mimetype.startsWith("image")) {
+  if (!productImage.mimetype.startsWith("image")) {
     throw new CustomeError.BadRequestError(
       "File not supported, please upload image only!"
     )
@@ -65,7 +65,7 @@ const uploadImage = async (req, res) => {
 
   //check file length
   const maxSize = 1024 * 1024
-  if (productImage.image.size > maxSize) {
+  if (productImage.size > maxSize) {
     throw new CustomeError.BadRequestError("Please upload less than 1mb!")
   }
 
@@ -74,7 +74,6 @@ const uploadImage = async (req, res) => {
     __dirname,
     "../public/uploads/" + `${productImage.name}`
   )
-
   await productImage.mv(imagePath)
   res.status(StatusCodes.OK).json({ image: `/uploads/${productImage.name}` })
 }
