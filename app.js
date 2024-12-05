@@ -41,7 +41,7 @@ app.get("/api/v1", (req, res) => {
 app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/users", userRoute)
 app.use("/api/v1/products", productRoute)
-app.use("/api/v1/products", reviewRoute)
+app.use("/api/v1/reviews", reviewRoute)
 
 //error-handlers
 app.use(notFoundMiddleware)
