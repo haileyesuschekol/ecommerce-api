@@ -65,6 +65,7 @@ const productSchema = new mongoose.Schema(
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
 
+// trigger to get single product
 productSchema.virtual("reviews", {
   ref: "Review",
   localField: "_id",
@@ -72,7 +73,13 @@ productSchema.virtual("reviews", {
   justOne: false,
 })
 
-// productSchema.pre("deleteOne", async function (next) {
-//   await this.model("Review").deleteMany({ product: this._id })
-// })
+//delete reviews when associated product deleted
+productSchema.pre(
+  "deleteOne",
+  { document: true, query: false },
+  async function () {
+    // 'this' refers to the document being deleted
+    await this.model("Review").deleteMany({ product: this._id })
+  }
+)
 module.exports = mongoose.model("Product", productSchema)

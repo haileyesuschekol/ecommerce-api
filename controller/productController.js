@@ -12,14 +12,14 @@ const createProduct = async (req, res) => {
 
 //get all product
 const getAllProduct = async (req, res) => {
-  const product = await Product.find({}).populate("reviews")
+  const product = await Product.find({})
   res.status(StatusCodes.OK).json({ product, count: product.length })
 }
 
-//get single product
+//get single product with reviews - mongoose virtuals
 const getSingleProduct = async (req, res) => {
   const { id: productId } = req.params
-  const product = await Product.findOne({ _id: productId })
+  const product = await Product.findOne({ _id: productId }).populate("reviews")
   if (!product) {
     throw new CustomeError.NotFoundError("No product found!")
   }

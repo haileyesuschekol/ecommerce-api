@@ -42,7 +42,7 @@ const getAllReview = async (req, res) => {
   res.status(StatusCodes.OK).json({ review, count: review.length })
 }
 
-//get single review
+//get single review with username and product
 const getSingleReview = async (req, res) => {
   const { id: reviewId } = req.params
   const review = await Review.findOne({ _id: reviewId })
