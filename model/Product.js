@@ -72,4 +72,7 @@ productSchema.virtual("reviews", {
   justOne: false,
 })
 
+// productSchema.pre("deleteOne", async function (next) {
+//   await this.model("Review").deleteMany({ product: this._id })
+// })
 module.exports = mongoose.model("Product", productSchema)
