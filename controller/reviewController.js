@@ -30,20 +30,30 @@ const createReview = async (req, res) => {
 
 //get all review
 const getAllReview = async (req, res) => {
-  const review = await Review.find({}).populate({
-    path: "product",
-    select: "name company",
-  })
+  const review = await Review.find({})
+    .populate({
+      path: "product",
+      select: "name company",
+    })
+    .populate({
+      path: "user",
+      select: "name",
+    })
   res.status(StatusCodes.OK).json({ review, count: review.length })
 }
 
 //get single review
 const getSingleReview = async (req, res) => {
   const { id: reviewId } = req.params
-  const review = await Review.findOne({ _id: reviewId }).populate({
-    path: "product",
-    select: "name company",
-  })
+  const review = await Review.findOne({ _id: reviewId })
+    .populate({
+      path: "product",
+      select: "name company",
+    })
+    .populate({
+      path: "user",
+      select: "name",
+    })
   if (!review) {
     throw new CustomeError.NotFoundError("No review found!")
   }
