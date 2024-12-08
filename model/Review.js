@@ -1,10 +1,9 @@
-const { required } = require("joi")
 const mongoose = require("mongoose")
 
-const reviewModel = new mongoose.Schema(
+const reviewSchema = new mongoose.Schema(
   {
     rating: {
-      type: String,
+      type: Number,
       min: 1,
       max: 5,
       require: [true, "please provide rating!"],
@@ -20,12 +19,12 @@ const reviewModel = new mongoose.Schema(
       required: [true, "please provide comment!"],
     },
     user: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     product: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
       required: true,
     },
@@ -33,7 +32,46 @@ const reviewModel = new mongoose.Schema(
   { timestamps: true }
 )
 
-//user only give one review per product
-reviewModel.index({ product: 1, user: 1 }, { unique: true })
+// calculate average rating and number of rating
+///create aggregation pipeline
+reviewSchema.statics.calculateAverageRating = async function (productId) {
+  const result = await this.aggregate([
+    //match and group
+    { $match: { product: productId } },
+    {
+      $group: {
+        _id: null,
+        averageRating: { $avg: "$rating" },
+        numOfReviews: { $sum: 1 },
+      },
+    },
+  ])
 
-module.exports = mongoose.model("Review", reviewModel)
+  //set averagerating and number of rating
+  try {
+    await this.model("Product").findOneAndUpdate(
+      { _id: productId },
+      {
+        averageRating: result[0]?.averageRating || 0,
+        numOfReviews: result[0]?.numOfReviews || 0,
+      }
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//calculate when save method is trigger
+reviewSchema.post("save", async function () {
+  await this.constructor.calculateAverageRating(this.product)
+})
+
+//calculate when delete is trigger
+reviewSchema.post("deleteOne", async function () {
+  await this.constructor.calculateAverageRating(this.product)
+})
+
+//user only give one review per product
+reviewSchema.index({ product: 1, user: 1 }, { unique: true })
+
+module.exports = mongoose.model("Review", reviewSchema)

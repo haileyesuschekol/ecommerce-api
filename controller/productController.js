@@ -12,7 +12,7 @@ const createProduct = async (req, res) => {
 
 //get all product
 const getAllProduct = async (req, res) => {
-  const product = await Product.find({})
+  const product = await Product.find({}).populate("reviews")
   res.status(StatusCodes.OK).json({ product, count: product.length })
 }
 
