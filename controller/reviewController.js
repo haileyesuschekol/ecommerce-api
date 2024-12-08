@@ -8,7 +8,6 @@ const { checkPermission } = require("../utils")
 const createReview = async (req, res) => {
   //check if product exist
   const { product: productId } = req.body
-  console.log(req.body)
   const isValidProduct = await Product.findOne({ _id: productId })
   if (!isValidProduct) {
     throw new CustomeError.NotFoundError("Product not found1!")
@@ -85,12 +84,12 @@ const updateReview = async (req, res) => {
 //delete review
 const deleteReview = async (req, res) => {
   const { id: reviewId } = req.params
-  const review = await Review.findOne({ _id: reviewId })
+  let review = await Review.findOne({ _id: reviewId })
   if (!review) {
     throw new CustomeError.NotFoundError("No review found!")
   }
   checkPermission(req.user, review.user)
-  await review.deleteOne()
+  review = await Review.findByIdAndDelete({ _id: reviewId })
   res.status(StatusCodes.OK).json({ msg: "delete review" })
 }
 

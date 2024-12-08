@@ -67,7 +67,7 @@ reviewSchema.post("save", async function () {
 })
 
 //calculate when delete is trigger
-reviewSchema.post("deleteOne", async function () {
+reviewSchema.post("findByIdAndDelete", async function () {
   await this.constructor.calculateAverageRating(this.product)
 })
 
