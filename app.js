@@ -14,6 +14,7 @@ const authRoute = require("./routes/authRouter")
 const userRoute = require("./routes/userRouter")
 const productRoute = require("./routes/productRouter")
 const reviewRoute = require("./routes/reviewRouter")
+const orderRoute = require("./routes/orderRouter")
 //import Db connection
 const connectDb = require("./db/connect")
 
@@ -42,6 +43,7 @@ app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/users", userRoute)
 app.use("/api/v1/products", productRoute)
 app.use("/api/v1/reviews", reviewRoute)
+app.use("/api/v1/orders", orderRoute)
 
 //error-handlers
 app.use(notFoundMiddleware)
