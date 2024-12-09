@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://ecommerce-api-mejy.onrender.com"
+      "url": "https://ecommerce-api-mejy.onrender.com/api/v1"
     }
   ],
   "tags": [
