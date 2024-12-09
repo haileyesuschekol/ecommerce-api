@@ -4,6 +4,8 @@
 
 RESTful API for e-commerce operations built with Node.js, Express, and MongoDB Mongoose.
 
+[Live Documentation](https://ecommerce-api-mejy.onrender.com/api-docs)
+
 ## API Documentation
 
 Swagger UI: `https://ecommerce-api-mejy.onrender.com/api-docs`
