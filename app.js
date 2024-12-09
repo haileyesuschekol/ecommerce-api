@@ -4,6 +4,9 @@ require("express-async-errors")
 //express
 const express = require("express")
 const app = express()
+const swaggerUi = require("swagger-ui-express")
+const fs = require("fs")
+const path = require("path")
 
 //rest middlewares
 const morgan = require("morgan")
@@ -44,6 +47,12 @@ app.use(express.json())
 app.use(cookieParser(process.env.JWT_SECRET))
 app.use(express.static("./public"))
 app.use(fileUpload())
+
+const openApiDocumentation = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "openapi-doc.json"), "utf-8")
+)
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocumentation))
 
 app.get("/", (req, res) => {
   res.send("E-COMMERCE API")
