@@ -13,6 +13,7 @@ const rateLimiter = require("express-rate-limit")
 const helmet = require("helmet")
 const xss = require("xss-clean")
 const mongoSanitize = require("express-mongo-sanitize")
+const cors = require("cors")
 //routes
 const authRoute = require("./routes/authRouter")
 const userRoute = require("./routes/userRouter")
