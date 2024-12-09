@@ -57,6 +57,10 @@ JWT_LIFETIME=1d
 node app.js
 ```
 
+## RUN
+
+- `port 8080`
+
 ## API Endpoints
 
 ### Authentication
