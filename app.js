@@ -32,12 +32,6 @@ app.get("/", (req, res) => {
   res.send("E-COMMERCE API")
 })
 
-app.get("/api/v1", (req, res) => {
-  // console.log(req.cookies)
-  console.log(req.signedCookies)
-  res.send("sent cookies")
-})
-
 //auth-route
 app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/users", userRoute)
