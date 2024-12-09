@@ -13,16 +13,16 @@ const {
   updateOrder,
 } = require("../controller/orderController")
 
-router.route('/')
-.post(authenticate, createOrder)
-.get(authenticate, authorizedPermission('admin'), getAllOrder)
+router
+  .route("/")
+  .post(authenticate, createOrder)
+  .get(authenticate, authorizedPermission("admin"), getAllOrder)
 
-router.route('/showAllMyOrder')
-.get(authenticate, getCurrentUserOrder)
+router.route("/showAllMyOrder").get(authenticate, getCurrentUserOrder)
 
-router.route('/id')
-.get(authenticate, getSingleOrder)
-.patch(authenticate , updateOrder)
-
+router
+  .route("/:id")
+  .get(authenticate, getSingleOrder)
+  .patch(authenticate, updateOrder)
 
 module.exports = router

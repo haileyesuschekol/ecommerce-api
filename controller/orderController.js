@@ -63,20 +63,42 @@ const createOrder = async (req, res) => {
     .json({ order, clientSecret: order.clientSecret })
 }
 
+//get all order
 const getAllOrder = async (req, res) => {
-  res.send("get all order")
+  const order = await Order.find({})
+  res.status(StatusCodes.OK).json({ order, count: order.length })
 }
 
+//get single order
 const getSingleOrder = async (req, res) => {
-  res.send("get single order")
+  const { id: orderId } = req.params
+  const order = await Order.findOne({ _id: orderId })
+  if (!order) {
+    throw new CustomeError.NotFoundError("Order not found!")
+  }
+  checkPermission(req.user, order.user)
+  res.status(StatusCodes.OK).json({ order })
 }
 
+//get current order
 const getCurrentUserOrder = async (req, res) => {
-  res.send("get current user order")
+  const order = await Order.find({ user: req.user.userId })
+  res.status(StatusCodes.OK).json({ order, count: order.length })
 }
 
 const updateOrder = async (req, res) => {
-  res.send("update order")
+  const { id: orderId } = req.params
+  const { paymentIntentId } = req.body
+  const order = await Order.findOne({ _id: orderId })
+  if (!order) {
+    throw new CustomeError.NotFoundError("Order not found!")
+  }
+  checkPermission(req.user, order.user)
+
+  order.paymentIntentId = paymentIntentId
+  order.status = "paid"
+  await order.save()
+  res.status(StatusCodes.OK).json({ order })
 }
 
 module.exports = {
