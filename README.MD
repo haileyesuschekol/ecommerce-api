@@ -10,6 +10,10 @@ RESTful API for e-commerce operations built with Node.js, Express, and MongoDB M
 
 Swagger UI: `https://ecommerce-api-mejy.onrender.com/api-docs`
 
+### Routes
+
+![E-Commerce api](./public/uploads/ecommerce-api-doc.png)
+
 ## Tech Stack
 
 - Node.js
